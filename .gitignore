@@ -5,3 +5,4 @@ cghooks-temp-*
 .php_cs.cache
 phpunit.xml
 cghooks.lock
+.phpunit.result.cache

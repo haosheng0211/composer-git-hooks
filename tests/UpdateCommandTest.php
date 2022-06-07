@@ -27,7 +27,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Added {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Added {$hook} hook", $this->commandTester->getDisplay());
         }
     }
 
@@ -40,7 +40,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
         }
     }
 
@@ -60,7 +60,7 @@ class UpdateCommandTest extends TestCase
 
         $this->commandTester->execute([]);
 
-        $this->assertContains("Added pre-flow-feature-start hook", $this->commandTester->getDisplay());
+        $this->assertStringContainsString("Added pre-flow-feature-start hook", $this->commandTester->getDisplay());
     }
 
     /**
@@ -80,7 +80,7 @@ class UpdateCommandTest extends TestCase
 
         $this->commandTester->execute([]);
 
-        $this->assertContains("Updated pre-flow-feature-start hook", $this->commandTester->getDisplay());
+        $this->assertStringContainsString("Updated pre-flow-feature-start hook", $this->commandTester->getDisplay());
     }
 
     /**
@@ -96,7 +96,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
 
             $content = file_get_contents(".git/hooks/" . $hook);
             $this->assertNotFalse(strpos($content, "#!/bin/bash"));
@@ -148,7 +148,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute(['--force-win' => true]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
 
             $content = file_get_contents(".git/hooks/" . $hook);
             $this->assertNotFalse(strpos($content, "#!/bin/bash"));
@@ -174,10 +174,10 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         foreach ($hooks as $hook => $scripts) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
 
             $content = file_get_contents(".git/hooks/" . $hook);
-            $this->assertContains(implode(PHP_EOL, $scripts), $content);
+            $this->assertStringContainsString(implode(PHP_EOL, $scripts), $content);
         }
     }
 
@@ -197,7 +197,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute(['--global' => true]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
         }
     }
 
@@ -216,7 +216,7 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute(['--lock-dir' => dirname($hookFile)]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
         }
 
         self::rmdir($lockDir);
@@ -234,10 +234,10 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute(['--global' => true]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertNotContains("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertStringNotContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
         }
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'You need to run the add command globally first before you try to update',
             $this->commandTester->getDisplay()
         );
@@ -258,8 +258,8 @@ class UpdateCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         foreach (array_keys(self::$hooks) as $hook) {
-            $this->assertContains("Updated {$hook} hook", $this->commandTester->getDisplay());
-            $this->assertFileNotExists(".git/hooks/{$hook}");
+            $this->assertStringContainsString("Updated {$hook} hook", $this->commandTester->getDisplay());
+            $this->assertFileDoesNotExist(".git/hooks/{$hook}");
             $this->assertFileExists("{$currentDir}/.git/hooks/{$hook}");
         }
 
